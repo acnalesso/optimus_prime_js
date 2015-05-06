@@ -40,9 +40,8 @@ module.exports = {
 
   lastRequestFor: function(path, callback) {
     var requestsUrl = "http://localhost:7011/get/"+ path;
-
     superagent.get(requestsUrl, function(error, response) {
-      callback(JSON.parse(response.text));
+      callback(response);
     });
   }
 };
