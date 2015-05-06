@@ -39,7 +39,7 @@ module.exports = {
   },
 
   lastRequestFor: function(path, callback) {
-    var requestsUrl = "http://localhost:7011/requests/"+ path;
+    var requestsUrl = "http://localhost:7011/get/"+ path;
 
     superagent.get(requestsUrl).end(function(error, response) {
       if (error) { new Throw("Something went wrong!") }
