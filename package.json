@@ -1,6 +1,6 @@
 {
   "name": "optimus_prime_js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "JS Driver for OptimusPrime - Ruby",
   "main": "src/index.js",
   "scripts": {
