@@ -28,7 +28,7 @@ module.exports = {
   },
 
   prime: function(path) {
-    options = Array.prototype.slice.call(arguments, 1)[0];
+    options = Array.prototype.slice.call(arguments, 1)[0] || {};
     options.content_type = options.content_type ? options.content_type : 'json'
     params = this.merge({path_name: path}, options);
 
