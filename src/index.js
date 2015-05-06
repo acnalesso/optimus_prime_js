@@ -42,7 +42,6 @@ module.exports = {
     var requestsUrl = "http://localhost:7011/get/"+ path;
 
     superagent.get(requestsUrl, function(error, response) {
-      if (error) { new Throw("Something went wrong!") }
       callback(JSON.parse(response.text));
     });
   }
