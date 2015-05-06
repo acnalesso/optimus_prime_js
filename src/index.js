@@ -29,6 +29,7 @@ module.exports = {
 
   prime: function(path) {
     options = Array.prototype.slice.call(arguments, 1)[0];
+    options.content_type = options.content_type ? options.content_type : 'json'
     params = this.merge({path_name: path}, options);
 
     superagent.post("http://localhost.bskyb.com:7011/prime").
@@ -41,6 +42,7 @@ module.exports = {
   lastRequestFor: function(path, callback) {
     var requestsUrl = "http://localhost:7011/get/"+ path;
     superagent.get(requestsUrl, function(error, response) {
+      if (error) { new Throw('Could not retrieve last request for: '+ path) };
       callback(JSON.parse(response.text || '{}'));
     });
   }
