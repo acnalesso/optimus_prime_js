@@ -2,6 +2,24 @@ require("shelljs/global");
 var superagent = require("superagent");
 
 module.exports = {
+  merge: function(obj1, obj2) {
+    var tmpObj = {}
+
+    for(var property in obj1) {
+      if(obj1.hasOwnProperty(property)) {
+        tmpObj[property] = obj1[property];
+      }
+    }
+
+    for(var property in obj2) {
+      if(obj2.hasOwnProperty(property)) {
+        tmpObj[property] = obj2[property];
+      }
+    }
+
+    return tmpObj;
+  },
+
   count: function(path, callback) {
     var requestsUrl = "http://localhost:7011/requests/"+ path;
     superagent.get(requestsUrl, function(e,r) {
