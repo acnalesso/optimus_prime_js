@@ -23,7 +23,7 @@ module.exports = {
   count: function(path, callback) {
     var requestsUrl = "http://localhost:7011/requests/"+ path;
     superagent.get(requestsUrl, function(e,r) {
-      callback(e, JSON.parse(r.text)["count"]);
+      callback(parseInt(JSON.parse(r.text || '{ count: 0 }')["count"]));
     });
   },
 
@@ -40,10 +40,10 @@ module.exports = {
   },
 
   lastRequestFor: function(path, callback) {
-    var requestsUrl = "http://localhost:7011/get/"+ path;
+    var requestsUrl = "http://localhost:7011/requests/"+ path;
     superagent.get(requestsUrl, function(error, response) {
       if (error) { new Throw('Could not retrieve last request for: '+ path) };
-      callback(JSON.parse(response.text || '{}'));
+      callback(JSON.parse(response.text || '{ "last_request": {} }')["last_request"]);
     });
   }
 };
