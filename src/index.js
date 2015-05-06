@@ -1,8 +1,6 @@
 require("shelljs/global");
 var superagent = require("superagent");
 
-exec("ruby -e 'require \"optimus_prime\"; OptimusPrime::Cannon.fire!(7011)'");
-
 module.exports = {
   count: function(path, callback) {
     var requestsUrl = "http://localhost:7011/requests/"+ path;
