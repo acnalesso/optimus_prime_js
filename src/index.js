@@ -39,11 +39,14 @@ module.exports = {
       });
   },
 
+  // TODO: Refactor this :)
   lastRequestFor: function(path, callback) {
     var requestsUrl = "http://localhost:7011/requests/"+ path;
     superagent.get(requestsUrl, function(error, response) {
       if (error) { new Throw('Could not retrieve last request for: '+ path) };
-      callback(JSON.parse(response.text || '{ "last_request": {} }')["last_request"]);
+      payload = JSON.parse(response.text || '{}');
+      payload = payload === null ? {} : payload
+      callback(payload["last_request"]);
     });
   }
 };
