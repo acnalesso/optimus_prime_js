@@ -36,5 +36,14 @@ module.exports = {
       end(function(error, response) {
         if (response.status === 404) { new Throw("Could not be primed :("); }
       });
+  },
+
+  lastRequestFor: function(path, callback) {
+    var requestsUrl = "http://localhost:7011/requests/"+ path;
+
+    superagent.get(requestsUrl).end(function(error, response) {
+      if (error) { new Throw("Something went wrong!") }
+      callback(JSON.parse(response.text));
+    });
   }
 };
