@@ -44,10 +44,9 @@ module.exports = {
     var requestsUrl = "http://localhost:7011/requests/"+ path;
     superagent.get(requestsUrl, function(error, response) {
       if (error) { new Throw('Could not retrieve last request for: '+ path) };
+
       payload = JSON.parse(response.text || '{}');
-      payload = payload === null ? { "last_request": {} } : payload
-      payload = payload["last_request"] === null ? { "last_request": {} } : payload
-      callback(payload["last_request"]);
+      callback(payload["last_request"] || {});
     });
   }
 };
