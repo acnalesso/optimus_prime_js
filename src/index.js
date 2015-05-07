@@ -35,18 +35,29 @@ module.exports = {
     superagent.post("http://localhost.bskyb.com:7011/prime").
       send(params).
       end(function(error, response) {
-        if (response.status === 404) { new Throw("Could not be primed :("); }
+        if (response.status === 404) { throw new Error("Could not be primed :("); }
       });
   },
 
   // TODO: Refactor this :)
   lastRequestFor: function(path, callback) {
-    var requestsUrl = "http://localhost:7011/requests/"+ path;
-    superagent.get(requestsUrl, function(error, response) {
-      if (error) { new Throw('Could not retrieve last request for: '+ path) };
+      var requestsUrl = "http://localhost:7011/requests/"+ path;
+      var interval = setInterval(function() {
+        superagent.get(requestsUrl, function(error, response) {
+          if (error) { throw new Error('Could not retrieve last request for: '+ path); }
 
-      payload = JSON.parse(response.text || '{}');
-      callback(payload["last_request"] || {});
-    });
-  }
+          payload = JSON.parse(response.text || '{}');
+          if (payload["last_request"]) {
+            clearInterval(interval);
+            callback(payload["last_request"]);
+          }
+        });
+      }, 3);
+      setTimeout(function() {
+        if (interval) {
+          clearInterval(interval);
+          throw new Error('Timed out when retrieving last request for: '+ path);
+        }
+      }, 3000);
+    }
 };
