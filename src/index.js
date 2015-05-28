@@ -2,7 +2,7 @@ require("shelljs/global");
 var superagent = require("superagent");
 
 module.exports = {
-  waitFor: 1000,
+  waitFor: 5000,
   merge: function(obj1, obj2) {
     var tmpObj = {}
 
@@ -42,24 +42,24 @@ module.exports = {
 
   // TODO: Refactor this :)
   lastRequestFor: function(path, callback) {
-     var requestsUrl = "http://localhost:7011/requests/"+ path;
-     var count = 0;
-     var fn = function() {
-        clearInterval(interval);
-        if (count > this.waitFor) { new Throw('request has not been made'); }
-
+      var requestsUrl = "http://localhost:7011/requests/"+ path;
+      var interval = setInterval(function() {
         superagent.get(requestsUrl, function(error, response) {
-            if (error) { throw new Error('Could not retrieve last request for: '+ path); }
+          if (error) { throw new Error('Could not retrieve last request for: '+ path); }
 
-            payload = JSON.parse(response.text || '{}');
-            if (payload["last_request"]) {
-                if (callback(payload["last_request"])) { return true; };
-                count += 3;
-                interval = setInterval(fn, 3);
-            }
-       });
-     }
-
-     var interval = setInterval(fn, 3);
+          payload = JSON.parse(response.text || '{}');
+          if (payload["last_request"]) {
+            clearInterval(interval);
+            interval = false;
+            callback(payload["last_request"]);
+          }
+        });
+      }, 50);
+      setTimeout(function() {
+        if (interval) {
+          clearInterval(interval);
+          throw new Error('Timed out when retrieving last request for: '+ path);
+        }
+      }, this.waitFor);
     }
 };
