@@ -41,7 +41,8 @@ module.exports = {
   },
 
   // TODO: Refactor this :)
-  lastRequestFor: function(path, callback) {
+  lastRequestFor: function(path, callback, timeout) {
+      var wait = timeout || this.waitFor;
       var requestsUrl = "http://localhost:7011/requests/"+ path;
       var interval = setInterval(function() {
         superagent.get(requestsUrl, function(error, response) {
@@ -60,6 +61,6 @@ module.exports = {
           clearInterval(interval);
           throw new Error('Timed out when retrieving last request for: '+ path);
         }
-      }, this.waitFor);
+      }, wait);
     }
 };
