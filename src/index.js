@@ -23,7 +23,7 @@ var OptimusPrimeResolver = function (path, id) {
         browser.executeScript('window.preregBackendUrl = "'+ (originalURL+"?_OpID="+ primedId) +'";').then(function () {
           browser.waitForAngular();
           fn(self);
-          superagent.get('http://localhost:7011/clearAll/'+ path + '?_OpID='+ primedId);
+          superagent.get('http://localhost:7011/purge');
           resolve(true);
         });
       });
