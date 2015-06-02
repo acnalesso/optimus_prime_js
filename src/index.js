@@ -1,7 +1,8 @@
 var superagent = require("superagent");
 var Promise = require('es6-promise').Promise;
 
-var OptimusPrimeResolver = function (id) {
+var OptimusPrimeResolver = function (path, id) {
+  this.path = path;
   this.id = id;
   this.waitFor = 5000;
 
@@ -13,6 +14,7 @@ var OptimusPrimeResolver = function (id) {
   };
 
   this.then = function(fn) {
+    var path = this.path;
     var primedId = this.id;
     var self = this;
 
@@ -21,6 +23,7 @@ var OptimusPrimeResolver = function (id) {
         browser.executeScript('window.preregBackendUrl = "'+ (originalURL+"?_OpID="+ primedId) +'";').then(function () {
           browser.waitForAngular();
           fn(self);
+          superagent.get('http://localhost:7011/clearAll/'+ path + '?_OpID='+ primedId);
           resolve(true);
         });
       });
@@ -78,6 +81,9 @@ module.exports = function (path) {
   path = path + '?_OpID='+ id;
   params = this.merge({path_name: path}, options);
 
+  //
+  // We need to wait for angular :)
+  //
   browser.waitForAngular();
 
   return new Promise(function (resolve, reject) {
@@ -85,7 +91,7 @@ module.exports = function (path) {
       send(params).
       end(function(error, response) {
         if (error) { reject(false); throw new Error("Could not be primed :("); }
-        resolve(new OptimusPrimeResolver(id));
+        resolve(new OptimusPrimeResolver(path, id));
       });
   });
 };
