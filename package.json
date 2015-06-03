@@ -8,11 +8,8 @@
   },
   "author": "acnalesso@yahoo.co.uk",
   "license": "MIT",
-  "devDependencies": {
-    "es6-promise": "^2.1.1",
-    "superagent": "^1.2.0"
-  },
   "dependencies": {
+    "es6-promise": "^2.1.1",
     "superagent": "^1.2.0"
   }
 }
