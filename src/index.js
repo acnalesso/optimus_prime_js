@@ -54,7 +54,7 @@ var OptimusPrimeResolver = function (path, id) {
   };
 }
 
-module.exports = function (path) {
+module.exports = function (path, options, callback) {
   this.merge = function(obj1, obj2) {
     var tmpObj = {}
 
@@ -73,24 +73,35 @@ module.exports = function (path) {
     return tmpObj;
   };
 
-  var id = Date.now();
-  options = Array.prototype.slice.call(arguments, 1)[0] || {};
+  var id = typeof(callback) === "function" ? '' : Date.now();
+
+  if (options === undefined) { options = {}; }
   options.content_type = options.content_type ? options.content_type : 'json'
 
   path = path + '?_OpID='+ id;
   params = this.merge({path_name: path}, options);
 
-  //
-  // We need to wait for angular :)
-  //
-  browser.waitForAngular();
-
-  return new Promise(function (resolve, reject) {
+  if (callback) {
     superagent.post("http://localhost.bskyb.com:7011/prime").
       send(params).
       end(function(error, response) {
-        if (error) { reject(false); throw new Error("Could not be primed :("); }
-        resolve(new OptimusPrimeResolver(path, id));
+        if (error) { throw new Error("Could not be primed :("); }
+        callback(new OptimusPrimeResolver(path, id));
       });
-  });
+  } else {
+
+    //
+    // We need to wait for angular :)
+    //
+    browser.waitForAngular();
+
+    return new Promise(function (resolve, reject) {
+      superagent.post("http://localhost.bskyb.com:7011/prime").
+        send(params).
+        end(function(error, response) {
+          if (error) { reject(false); throw new Error("Could not be primed :("); }
+          resolve(new OptimusPrimeResolver(path, id));
+        });
+    });
+  }
 };
