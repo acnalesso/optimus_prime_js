@@ -39,6 +39,7 @@ var OptimusPrimeResolver = function (path, id, URLToBeReplaced) {
   // TODO: Refactor this :)
   this.lastRequestFor = function(path, callback, timeout) {
       var wait = timeout || this.waitFor;
+      var primedId = this.id;
       var requestsUrl = "http://localhost:7011/requests/"+ path + '?_OpID='+ this.id;
       var interval = setInterval(function() {
         superagent.get(requestsUrl, function(error, response) {
@@ -55,7 +56,9 @@ var OptimusPrimeResolver = function (path, id, URLToBeReplaced) {
       setTimeout(function() {
         if (interval) {
           clearInterval(interval);
-          throw new Error('Timed out when retrieving last request for: '+ path);
+          var jasmineCurrentEnv =  jasmine.getEnv();
+          console.log('\n\nFailed in: ***it => '+ jasmineCurrentEnv.currentSpec.description+ '****\n\n');
+          throw new Error('Timed out when retrieving last request for: '+ path + '?_OpID='+ primedId);
         }
       }, wait);
   };
@@ -80,7 +83,7 @@ module.exports = function (path, options, callback) {
     return tmpObj;
   };
 
-  var id = typeof(callback) === "function" ? '' : parseInt(Math.random(Date.now()) * 1000) + Date.now();
+  var id = typeof(callback) === "function" ? '' :  Date.now() + '-' + parseInt(Math.random(Date.now()) * 10000) * 10;
   var URLToBeReplaced = options._URLToBeReplaced;
 
   if (options === undefined) { options = {}; }
@@ -107,7 +110,7 @@ module.exports = function (path, options, callback) {
       superagent.post("http://localhost.bskyb.com:7011/prime").
         send(params).
         end(function(error, response) {
-          if (error) { reject(false); throw new Error("Could not be primed :("); }
+          if (error) { throw new Error("Could not be primed :("); reject(false); }
           resolve(new OptimusPrimeResolver(path, id, URLToBeReplaced));
         });
     });
