@@ -1,5 +1,5 @@
 var superagent = require('superagent');
-var OptimusPrime = require('./optimus_prime');
+var OptimusPrimeHelper = require('./optimus-prime-helper');
 
 var Primer = function (path, options, callback) {
 
@@ -33,10 +33,10 @@ var Primer = function (path, options, callback) {
     send(params).
     end(function(error) {
       if (error) { throw new Error("Could not be primed :("); }
-      callback(new Primer.OptimusPrime(path));
+      callback(new Primer.OptimusPrimeHelper(path));
     });
 };
 
 Primer.requester = superagent;
-Primer.OptimusPrime = OptimusPrime;
+Primer.OptimusPrimeHelper = OptimusPrimeHelper;
 module.exports = Primer;

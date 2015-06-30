@@ -5,10 +5,10 @@ var prime = require('../src/primer');
 
 describe('Primer', function () {
   var url, params, error, response, path, waitedForAngular = false;
-  var mockedOptimusPrime = sinon.spy(prime, 'OptimusPrime');
+  var mockedOptimusPrimeHelper = sinon.spy(prime, 'OptimusPrimeHelper');
 
   beforeEach(function () {
-    prime.OptimusPrime.reset();
+    prime.OptimusPrimeHelper.reset();
     error = undefined;
     url = undefined;
     path = undefined;
@@ -35,7 +35,7 @@ describe('Primer', function () {
       expect(url).to.equal('http://localhost.bskyb.com:7011/prime');
     });
 
-    it('returns an instance of OptimusPrime when primed with a callback function', function () {
+    it('returns an instance of OptimusPrimeHelper when primed with a callback function', function () {
       var op;
       prime('endpoint', {}, function (_op_) { op = _op_; });
       expect(op).to.be.a('object');
@@ -55,7 +55,7 @@ describe('Primer', function () {
 
     it('passes path to the instance created when callback is called', function () {
        prime('endpoint', {}, function() {});
-       expect(mockedOptimusPrime).to.have.been.calledWith('endpoint?_OpID=');
+       expect(mockedOptimusPrimeHelper).to.have.been.calledWith('endpoint?_OpID=');
     });
 
 });
