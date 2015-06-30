@@ -1,10 +1,9 @@
 var superagent = require("superagent");
 var Promise = require('es6-promise').Promise;
 
-var OptimusPrime = function (path, URLToBeReplaced) {
+var OptimusPrime = function (path) {
   var path = path;
   this.waitFor = 5000;
-  this._URLToBeReplaced = URLToBeReplaced;
 
   this.count = function(callback) {
     var requestsUrl = "http://localhost:7011/requests/"+ path;
@@ -13,26 +12,6 @@ var OptimusPrime = function (path, URLToBeReplaced) {
     });
   };
 
-  this.then = function(fn) {
-    var primedId = this.id;
-    var self = this;
-    var _URLToBeReplaced = this._URLToBeReplaced;
-
-    return new Promise(function (resolve, reject) {
-      if (_URLToBeReplaced) {
-        browser.executeScript('return '+_URLToBeReplaced+';').then(function(originalURL) {
-          browser.executeScript(_URLToBeReplaced + '= "'+ (originalURL+"?_OpID="+ primedId) +'";').then(function () {
-            browser.waitForAngular();
-            fn(self);
-            resolve(true);
-          });
-        });
-      } else {
-        fn(self);
-        resolve(true);
-      }
-    });
-  };
 
   // TODO: Refactor this :)
   this.lastRequestFor = function(callback, timeout) {
