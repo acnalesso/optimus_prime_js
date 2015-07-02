@@ -1,14 +1,14 @@
-var superagent = require("superagent");
+var Superagent = require("superagent");
 var Promise = require('es6-promise').Promise;
 
-var OptimusPrime = function (path) {
+var OptimusPrimeHelper = function (path) {
   var path = path;
+  var requestsUrl = "http://localhost:7011/requests/"+ path;
   this.waitFor = 5000;
 
   this.count = function(callback) {
-    var requestsUrl = "http://localhost:7011/requests/"+ path;
-    superagent.get(requestsUrl, function(e,r) {
-      callback(parseInt(JSON.parse(r.text || '{ count: 0 }')["count"]));
+    this.requester.get(requestsUrl, function(e,r) {
+      callback(parseInt(JSON.parse(r.text || '{ "count": 0 }')["count"]));
     });
   };
 
@@ -19,7 +19,7 @@ var OptimusPrime = function (path) {
       var primedId = this.id;
       var requestsUrl = "http://localhost:7011/requests/"+ path
       var interval = setInterval(function() {
-        superagent.get(requestsUrl, function(error, response) {
+        this.requester.get(requestsUrl, function(error, response) {
           if (error) { throw new Error('Could not retrieve last request for: '+ path); }
 
           payload = JSON.parse(response.text || '{}');
@@ -41,4 +41,6 @@ var OptimusPrime = function (path) {
   };
 };
 
-module.exports = OptimusPrime;
+OptimusPrimeHelper.prototype.requester = Superagent;
+
+module.exports = OptimusPrimeHelper;
