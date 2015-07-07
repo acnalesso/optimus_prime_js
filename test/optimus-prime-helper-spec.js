@@ -34,4 +34,36 @@ describe('Optimus Prime', function () {
       expect(amount).to.eq(1);
     })
   });
+
+  describe('lastRequestFor', function () {
+
+    it('times out then calls the function passed to lastRequestFor', function (done) {
+      helper = new OptimusPrimeHelper('endpoint');
+      helper.waitFor = 10;
+      response = '{ "last_request": null }';
+      helper.requester = requester;
+
+      helper.lastRequestFor(function (lastRequest) {
+        expect(JSON.stringify(lastRequest)).to.eq('{}');
+        done();
+      });
+    });
+
+    it('does not time out when last request response is fulfilled', function (done) {
+      helper = new OptimusPrimeHelper('endpoint');
+      helper.waitFor = 10;
+      response = '{ "last_request": null }';
+      helper.requester = requester;
+
+      setTimeout(function () {
+        response = '{ "last_request": { "name": "Antonio" } }';
+      }, 5);
+
+      helper.lastRequestFor(function (lastRequest) {
+        expect(lastRequest.name).to.eq('Antonio');
+        done();
+      });
+    });
+
+  });
 });

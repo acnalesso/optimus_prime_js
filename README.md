@@ -23,43 +23,20 @@ It's a javascript driver for Optimus Prime mock server currently compatible with
   prime('endpoint-here', { response: { details: { name: 'Papoy' } } })
 ```
 
-## Static priming
+## Priming
   Whenever you set the url that will be used in a request which will
   be sent to Optimus Prime mock server you need to write the url like so:
   <code>http://host:portNumber/get/path-you-want-to-prime?_OpID=</code>
 ```js
   //
-  // NOTE: Pass a callback function. Optimus Prime JS will not generate an ID for this particular endpoint
+  // NOTE: When a callback function is passed in, Optimus Prime JS will not generate an ID for this particular endpoint
   //
-  // Primed URL example: http://host:portNumber/get/endpoint-here?_OpID=
   prime('endpoint-here', {}, function (op) {
-    op.count(function (result) {
-      console.log(result);
-    })
-  });
-```
 
-## Parallel priming
-```js
-  //
-  // NOTE: It returns a promise. Optimus Prime JS will generate a unique ID for this endpoint.
-  //
-  // Primed URL example: http://host:portNumber/get/endpoint-here?_OpID=generatedIdHere
-  prime('endpoint-here', {}).then(function (op) {
-    op.count(function (result) {
-      console.log(result);
-    })
-  });
-```
+    console.log(op.url);
+    // => http://host:portNumber/get/:endpointHere?_OpID=:timestamps-:randomNumber
+    // => http://localhost:7011/get/posts?_OpID=:321302392-3212
 
-## Replacing url before request is sent
-```js
-  //
-  // NOTE: It returns a promise. Optimus Prime JS will generate a unique ID for this endpoint.
-  //
-  // Optimus Prime JS will reassign window.config.backendURL to the same url but with ?_OpID=generatedID
-  //
-  prime('endpoint-here', { _URLToBeReplaced: 'window.config.backendURL'}).then(function (op) {
     op.count(function (result) {
       console.log(result);
     })
@@ -69,5 +46,6 @@ It's a javascript driver for Optimus Prime mock server currently compatible with
 ## TODO:
   * Support different testing frameworks ( It only supports Protractor at the moment )
   * Refactor the code
-  * Add more functionality?
+  * Add more functionalities?
   * Rewrite Optimus Prime mock server in Javascript
+  * Support synchronous count and lastRequestFor

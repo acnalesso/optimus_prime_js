@@ -12,35 +12,50 @@ var OptimusPrimeHelper = function (path) {
     });
   };
 
+  var interval = function(fn, wait, times) {
+    var internalInterval = (function (w, t) {
+      return function () {
+        if (t === 0) {
+          return fn(function (lastRequestForCallback) { lastRequestForCallback({}); });
+        }
 
-  // TODO: Refactor this :)
+        if (t-- > 0) {
+          setTimeout(internalInterval, w);
+        }
+      };
+    })(wait, times);
+
+    internalInterval();
+  };
+
+
   this.lastRequestFor = function(callback, timeout) {
       var wait = timeout || this.waitFor;
-      var primedId = this.id;
-      var requestsUrl = "http://localhost:7011/requests/"+ path
-      var interval = setInterval(function() {
-        this.requester.get(requestsUrl, function(error, response) {
+      var requester = this.requester;
+
+      //
+      // nextTick is responsible for setting another timeout in this case
+      // it gets called when the payload['last_request'] is empty.
+      // We pass the callback to it as this callback gets called in the last attempt
+      // to wait for the last request.
+      interval(function (nextTick) {
+        requester.get(requestsUrl, function(error, response) {
           if (error) { throw new Error('Could not retrieve last request for: '+ path); }
 
-          payload = JSON.parse(response.text || '{}');
+          var payload = JSON.parse(response.text === 'null' ? '{}' : response.text);
+
           if (payload["last_request"]) {
-            clearInterval(interval);
-            interval = false;
             callback(payload["last_request"]);
+          } else {
+            nextTick(callback);
           }
         });
-      }, 50);
-      setTimeout(function() {
-        if (interval) {
-          clearInterval(interval);
-          var jasmineCurrentEnv =  typeof(jasmine) !== "undefined" ? jasmine.getEnv() : { currentSpec: { description: "" } };
-          console.log('\n\nFailed in: ***it => '+ jasmineCurrentEnv.currentSpec.description+ '****\n\n');
-          throw new Error('Timed out when retrieving last request for: '+ path);
-        }
-      }, wait);
+      }, wait, 3);
   };
 };
 
-OptimusPrimeHelper.prototype.requester = Superagent;
+OptimusPrimeHelper.prototype.requester = {
+  get: Superagent.get
+};
 
 module.exports = OptimusPrimeHelper;
