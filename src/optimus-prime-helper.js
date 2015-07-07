@@ -5,7 +5,8 @@ var OptimusPrimeHelper = function (path, id) {
   var requestsUrl = "http://localhost:7011/requests/"+ path;
 
   this.path = path;
-  this.waitFor = 5000;
+  this.times = 3;
+  this.waitFor = 500;
   this.id = id;
 
 
@@ -32,8 +33,8 @@ var OptimusPrimeHelper = function (path, id) {
   };
 
 
-  this.lastRequestFor = function(callback, timeout) {
-      var wait = timeout || this.waitFor;
+  this.lastRequestFor = function(callback, times) {
+      var times = times || this.times;
       var requester = this.requester;
 
       //
@@ -53,7 +54,7 @@ var OptimusPrimeHelper = function (path, id) {
             nextTick(callback);
           }
         });
-      }, wait, 3);
+      }, this.waitFor, times);
   };
 };
 
