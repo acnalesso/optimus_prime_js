@@ -53,9 +53,11 @@ describe('Primer', function () {
        }).to.throw(Error);
     });
 
-    it('passes path to the instance created when callback is called', function () {
-       prime('endpoint', {}, function() {});
-       expect(mockedOptimusPrimeHelper).to.have.been.calledWith('endpoint?_OpID=');
+    it('does not generate an id when no callback is given', function () {
+       var primed = prime('endpoint', {});
+       expect(primed.path).to.eq('endpoint?_OpID=');
+       expect(primed.id).to.eq('');
+
     });
 
 });

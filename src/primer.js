@@ -21,7 +21,7 @@ var Primer = function (path, options, callback) {
     return tmpObj;
   };
 
-  var id = typeof(callback) === "function" ? '' :  Date.now() + '-' + parseInt(Math.random(Date.now()) * 10000) * 10;
+  var id = typeof(callback) === "function" ? Date.now() + '-' + parseInt(Math.random(Date.now()) * 10000) * 10 : '';
 
   if (options === undefined) { options = {}; }
   options.content_type = options.content_type ? options.content_type : 'json'
@@ -33,8 +33,9 @@ var Primer = function (path, options, callback) {
     send(params).
     end(function(error) {
       if (error) { throw new Error("Could not be primed :("); }
-      callback(new Primer.OptimusPrimeHelper(path));
+      if (callback) { callback(new Primer.OptimusPrimeHelper(path, id)); }
     });
+    return new Primer.OptimusPrimeHelper(path, id);
 };
 
 Primer.requester = superagent;

@@ -14,6 +14,11 @@ describe('Optimus Prime', function () {
     get: function (url, fn) { fn(null, { text: response });  }
   };
 
+  it('keeps track of the generated id', function () {
+    helper = new OptimusPrimeHelper('endpoint', 'id-here');
+    expect(helper.id).to.eq('id-here');
+  });
+
   describe('count', function () {
     it('returns 0 when no requests have been made to an endpoint', function () {
       var amount = 0;

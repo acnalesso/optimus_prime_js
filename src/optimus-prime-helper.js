@@ -1,10 +1,13 @@
 var Superagent = require("superagent");
 var Promise = require('es6-promise').Promise;
 
-var OptimusPrimeHelper = function (path) {
-  var path = path;
+var OptimusPrimeHelper = function (path, id) {
   var requestsUrl = "http://localhost:7011/requests/"+ path;
+
+  this.path = path;
   this.waitFor = 5000;
+  this.id = id;
+
 
   this.count = function(callback) {
     this.requester.get(requestsUrl, function(e,r) {
