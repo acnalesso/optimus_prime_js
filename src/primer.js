@@ -26,7 +26,7 @@ var Primer = function (path, options, callback) {
   if (options === undefined) { options = {}; }
   options.content_type = options.content_type ? options.content_type : 'json'
 
-  path = path + '?_OpID='+ id;
+  path = (id === '' ? path : path +'?_OpID='+ id);
   params = merge({path_name: path}, options);
 
   superagent.post("http://localhost.bskyb.com:7011/prime").

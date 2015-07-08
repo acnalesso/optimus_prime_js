@@ -1,5 +1,4 @@
 var Superagent = require("superagent");
-var Promise = require('es6-promise').Promise;
 
 var OptimusPrimeHelper = function (path, id) {
   var requestsUrl = "http://localhost:7011/requests/"+ path;
