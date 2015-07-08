@@ -24,7 +24,10 @@ var OptimusPrimeHelper = function (path, id) {
         }
 
         if (t-- > 0) {
-          setTimeout(internalInterval, w);
+          fn(function () {
+            // write tests
+            setTimeout(internalInterval, w);
+          });
         }
       };
     })(wait, times);
