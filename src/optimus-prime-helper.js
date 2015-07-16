@@ -35,7 +35,7 @@ var OptimusPrimeHelper = function (path, id) {
   };
 
 
-  this.lastRequestFor = function(callback, times) {
+  this.lastRequest = function(callback, times) {
       var times = times || this.times;
       var requester = this.requester;
 

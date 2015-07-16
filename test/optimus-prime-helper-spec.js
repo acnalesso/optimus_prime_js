@@ -40,15 +40,15 @@ describe('Optimus Prime', function () {
     })
   });
 
-  describe('lastRequestFor', function () {
+  describe('lastRequest', function () {
 
-    it('times out then calls the function passed to lastRequestFor', function (done) {
+    it('times out then calls the function passed to lastRequest', function (done) {
       helper = new OptimusPrimeHelper('endpoint');
       helper.waitFor = 10;
       response = '{ "last_request": null }';
       helper.requester = requester;
 
-      helper.lastRequestFor(function (lastRequest) {
+      helper.lastRequest(function (lastRequest) {
         expect(JSON.stringify(lastRequest)).to.eq('{}');
         done();
       });
@@ -64,7 +64,7 @@ describe('Optimus Prime', function () {
         response = '{ "last_request": { "name": "Antonio" } }';
       }, 5);
 
-      helper.lastRequestFor(function (lastRequest) {
+      helper.lastRequest(function (lastRequest) {
         expect(lastRequest.name).to.eq('Antonio');
         done();
       });

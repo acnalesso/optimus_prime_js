@@ -55,7 +55,7 @@ describe('Primer', function () {
 
     it('does not generate an id when no callback is given', function () {
        var primed = prime('endpoint', {});
-       expect(primed.path).to.eq('endpoint?_OpID=');
+       expect(primed.path).to.eq('endpoint');
        expect(primed.id).to.eq('');
 
     });
