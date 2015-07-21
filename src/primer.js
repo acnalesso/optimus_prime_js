@@ -29,15 +29,16 @@ var Primer = function (path, options, callback) {
   path = (id === '' ? path : path +'?_OpID='+ id);
   params = merge({path_name: path}, options);
 
-  superagent.post("http://localhost.bskyb.com:7011/prime").
+  superagent.post(Primer.host + "/prime").
     send(params).
     end(function(error) {
       if (error) { throw new Error("Could not be primed :("); }
-      if (callback) { callback(new Primer.OptimusPrimeHelper(path, id)); }
+      if (callback) { callback(new Primer.OptimusPrimeHelper(path, id, Primer.host)); }
     });
-    return new Primer.OptimusPrimeHelper(path, id);
+    return new Primer.OptimusPrimeHelper(path, id, Primer.host);
 };
 
 Primer.requester = superagent;
 Primer.OptimusPrimeHelper = OptimusPrimeHelper;
+Primer.host = "http://localhost.bskyb.com:7011";
 module.exports = Primer;

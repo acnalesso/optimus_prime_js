@@ -1,7 +1,7 @@
 var Superagent = require("superagent");
 
-var OptimusPrimeHelper = function (path, id) {
-  var requestsUrl = "http://localhost:7011/requests/"+ path;
+var OptimusPrimeHelper = function (path, id, host) {
+  var requestsUrl = host + "/requests/"+ path;
 
   this.path = path;
   this.times = 3;
