@@ -38,6 +38,11 @@ var Primer = function (path, options, callback) {
     return new Primer.OptimusPrimeHelper(path, id, Primer.host);
 };
 
+Primer.lastRequestFor = function (path, callback, times) {
+  var id = path.match(/\?_OpID=(.*)/)[1];
+  (new Primer.OptimusPrimeHelper(path, id, Primer.host)).lastRequest(callback, times)
+};
+
 Primer.requester = superagent;
 Primer.OptimusPrimeHelper = OptimusPrimeHelper;
 Primer.host = "http://localhost.bskyb.com:7011";
