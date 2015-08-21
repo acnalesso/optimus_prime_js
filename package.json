@@ -9,6 +9,7 @@
   "author": "acnalesso@yahoo.co.uk",
   "license": "MIT",
   "dependencies": {
+    "es6-promise": "^3.0.2",
     "superagent": "^1.2.0"
   },
   "devDependencies": {
