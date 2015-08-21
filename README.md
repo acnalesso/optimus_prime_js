@@ -14,14 +14,31 @@ It's a javascript driver for Optimus Prime mock server currently compatible with
 
 ## Priming
 ```js
-  var prime = require('optimus_prime_js');
+  var prime = require('optimus_prime_js'); // It returns a promise
 
   // HTTP response status code
   prime('endpoint-here', { status_code: 200 })
 
   // HTTP Response body
   prime('endpoint-here', { response: { details: { name: 'Papoy' } } })
+
+  prime('path', {}).then(function () {
+    prime.countFor('path', function (x) {
+      // ...
+    });
+
+    prime.lastRequestFor('path', function (payload) {
+      // ...
+    });
+  });
 ```
+
+### countFor
+  see below
+### lastRequestFor
+  see below
+
+
 
 ## Priming with a callback
   Whenever you set the url that will be used in a request which will
